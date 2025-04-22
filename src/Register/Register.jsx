@@ -4,6 +4,8 @@ import { MdOutlineStarPurple500 } from "react-icons/md";
 import { Link } from "react-router-dom";
 import verification from "../assets/verify.json";
 import { useLottie } from "lottie-react";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "motion/react";
 
 const Register = () => {
   const options = {
@@ -15,7 +17,12 @@ const Register = () => {
 
   return (
     <div className="font-inter mt-6 px-3 lg:px-8 flex flex-col lg:flex-row gap-2 max-w-6xl mx-auto">
-      <div className="flex flex-col justify-center items-center lg:w-[60%]">
+      <motion.div
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        className="flex flex-col justify-center items-center lg:w-[60%]"
+      >
         <h1 className="font-merriweather text-2xl font-semibold text-blue-600">
           Register
         </h1>
@@ -131,10 +138,15 @@ const Register = () => {
             <Link to="/signin">Sign In</Link>
           </span>
         </h1>
-      </div>
-      <div className="w-full lg:w-[40%] mt-4 lg:mt-0 flex justify-center items-center">
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 70 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        className="w-full lg:w-[40%] mt-4 lg:mt-0 flex justify-center items-center"
+      >
         <div className="w-[130%]">{View}</div>
-      </div>
+      </motion.div>
     </div>
   );
 };
