@@ -1,0 +1,28 @@
+/* importing font Inter */
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+/* importing font merriweather */
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap");
+
+@import "tailwindcss";
+@plugin "daisyui";
+
+body,
+html {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  overflow-x: hidden;
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+a.active {
+  color: blue;
+  text-decoration: underline;
+}
+
+@theme {
+  --font-inter: "Inter", sans-serif;
+  --font-merriweather: "Merriweather", serif;
+}

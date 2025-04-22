@@ -1,0 +1,6 @@
+/* Prevent navbar link overlap on medium-sized tablets */
+@media (max-width: 1024px) {
+  .navbar .menu-horizontal {
+    flex-wrap: nowrap !important;
+  }
+}
