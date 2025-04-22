@@ -20,7 +20,7 @@ const Register = () => {
           Register
         </h1>
         <h1 className="text-3xl lg:text-4xl font-merriweather font-semibold text-[#05264e] mt-3 text-center lg:text-left">
-          Start your Experience here !
+          Start your Experience here
         </h1>
 
         <button className="p-3 w-full sm:w-[80%] border-1 border-slate-200 rounded-[6px] mt-5 cursor-pointer hover:-translate-y-1 hover:text-blue-600 hover:shadow-sm duration-200 font-semibold text-nowrap flex justify-center items-center">
@@ -112,9 +112,12 @@ const Register = () => {
                 Agree to our terms and policy
               </span>
             </div>
-            <p className="mt-2 sm:mt-0 text-slate-400 cursor-pointer text-sm">
+            <Link
+              to=""
+              className="mt-2 sm:mt-0 text-slate-400 cursor-pointer text-sm hover:text-blue-600 underline"
+            >
               Learn More
-            </p>
+            </Link>
           </div>
 
           <button className="bg-[#05264e] hover:bg-blue-600 rounded-[6px] p-3 text-white font-semibold cursor-pointer w-full mt-4 hover:-translate-y-1 duration-200">
@@ -129,8 +132,6 @@ const Register = () => {
           </span>
         </h1>
       </div>
-
-      {/* Right side (Animation) */}
       <div className="w-full lg:w-[40%] mt-4 lg:mt-0 flex justify-center items-center">
         <div className="w-[130%]">{View}</div>
       </div>
