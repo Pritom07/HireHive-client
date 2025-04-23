@@ -1,10 +1,12 @@
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineStarPurple500 } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import verification from "../assets/verify.json";
 import { useLottie } from "lottie-react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "motion/react";
+import useAuth from "../Context/useAuth";
+import { toast } from "react-toastify";
 
 const SignIn = () => {
   const options = {
@@ -13,6 +15,44 @@ const SignIn = () => {
   };
 
   const { View } = useLottie(options);
+  const { signInAccount, User } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleSignInForm = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const signinData = Object.fromEntries(formData.entries());
+    const email = signinData.email;
+    const password = signinData.password;
+
+    signInAccount(email, password)
+      .then((res) => {
+        const user = res.user;
+        signinData.lastSignInTime = user.metadata.lastSignInTime;
+
+        fetch("http://localhost:5000/users", {
+          method: "PATCH",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(signinData),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.modifiedCount > 0) {
+              toast.success("SignIn successfull");
+            }
+            {
+              location?.state ? navigate(location?.state) : navigate("/");
+            }
+          });
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
+
   return (
     <div className="font-inter mt-6 px-3 lg:px-8 flex flex-col lg:flex-row gap-2 max-w-6xl mx-auto">
       <motion.div
@@ -35,7 +75,7 @@ const SignIn = () => {
 
         <div className="divider mt-7">Or continue with</div>
 
-        <form className=" w-full sm:w-[80%]">
+        <form onSubmit={handleSignInForm} className=" w-full sm:w-[80%]">
           <div className="mt-4">
             <label className="text-[#05264e]">
               Email
@@ -45,6 +85,7 @@ const SignIn = () => {
               type="email"
               className="input p-6 mt-1 w-full focus:outline-none focus:border-blue-600 text-lg"
               placeholder="stevenjob@gmail.com"
+              name="email"
               required
             />
           </div>
@@ -58,6 +99,7 @@ const SignIn = () => {
               type="password"
               className="input p-6 mt-1 w-full focus:outline-none focus:border-blue-600 text-lg"
               placeholder="******"
+              name="password"
               required
             />
           </div>
@@ -66,8 +108,8 @@ const SignIn = () => {
             <div className="flex items-center">
               <input
                 type="checkbox"
-                name="checkBox"
                 className="mr-3 cursor-pointer"
+                name="rememberCheckBox"
               />
               <span className="text-slate-500 text-[15px] font-semibold">
                 Remember me

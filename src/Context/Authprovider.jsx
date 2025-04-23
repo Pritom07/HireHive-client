@@ -1,7 +1,10 @@
 import PropTypes from "prop-types";
 import ThemeContext from "./Authcontext";
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { auth } from "../Firebase/firebase.init";
 
 const Authprovider = ({ children }) => {
@@ -12,10 +15,16 @@ const Authprovider = ({ children }) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
+
+  const signInAccount = (email, password) => {
+    setLoading(true);
+    return signInWithEmailAndPassword(auth, email, password);
+  };
   const userInfo = {
     User,
     loading,
     createAccount,
+    signInAccount,
   };
   return (
     <ThemeContext.Provider value={userInfo}>{children}</ThemeContext.Provider>

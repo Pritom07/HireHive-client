@@ -1,7 +1,7 @@
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { MdOutlineStarPurple500 } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import verification from "../assets/verify.json";
 import { useLottie } from "lottie-react";
 // eslint-disable-next-line no-unused-vars
@@ -16,38 +16,62 @@ const Register = () => {
   };
 
   const { View } = useLottie(options);
-  const { createAccount } = useAuth();
+  const { createAccount, User } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleRegisterForm = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const registerData = Object.fromEntries(formData.entries());
     const email = registerData.email;
-    const password = registerData.password;
-    const repassword = registerData.repassword;
+    const Password = registerData.password;
+    const Repassword = registerData.repassword;
     const isChecked = e.target.checkBox.checked;
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{6,}$/;
+    const { repassword, checkBox, ...remainingData } = registerData;
 
     if (!isChecked) {
       toast.warn("Please agree with our terms and conditions.");
       return;
     }
 
-    if (!regex.test(password)) {
+    if (!regex.test(Password)) {
       toast.warn(
         "Your password should contain atleast one Uppercase,one lowercase,one special character and length should be atleast 6."
       );
       return;
     }
 
-    if (password !== repassword) {
+    if (Password !== Repassword) {
       toast.warn("Your Password and Re-password field should be same.");
       return;
     }
 
-    createAccount(email, password)
+    createAccount(email, Password)
       .then((res) => {
-        console.log(res.user);
+        const user = res.user;
+        const LastSignInTime = user.metadata.lastSignInTime;
+        const CreationTime = user.metadata.creationTime;
+        remainingData.lastSignInTime = LastSignInTime;
+        remainingData.creationTime = CreationTime;
+
+        fetch("http://localhost:5000/users", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(remainingData),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.insertedId) {
+              toast.success("successfully Registered");
+            }
+            {
+              location?.state ? navigate(location?.state) : navigate("/");
+            }
+          });
       })
       .catch((err) => {
         toast.error(`${err.message}`);
