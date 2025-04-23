@@ -6,6 +6,8 @@ import verification from "../assets/verify.json";
 import { useLottie } from "lottie-react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "motion/react";
+import useAuth from "../Context/useAuth";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const options = {
@@ -14,6 +16,43 @@ const Register = () => {
   };
 
   const { View } = useLottie(options);
+  const { createAccount } = useAuth();
+
+  const handleRegisterForm = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const registerData = Object.fromEntries(formData.entries());
+    const email = registerData.email;
+    const password = registerData.password;
+    const repassword = registerData.repassword;
+    const isChecked = e.target.checkBox.checked;
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{6,}$/;
+
+    if (!isChecked) {
+      toast.warn("Please agree with our terms and conditions.");
+      return;
+    }
+
+    if (!regex.test(password)) {
+      toast.warn(
+        "Your password should contain atleast one Uppercase,one lowercase,one special character and length should be atleast 6."
+      );
+      return;
+    }
+
+    if (password !== repassword) {
+      toast.warn("Your Password and Re-password field should be same.");
+      return;
+    }
+
+    createAccount(email, password)
+      .then((res) => {
+        console.log(res.user);
+      })
+      .catch((err) => {
+        toast.error(`${err.message}`);
+      });
+  };
 
   return (
     <div className="font-inter mt-6 px-3 lg:px-8 flex flex-col lg:flex-row gap-2 max-w-6xl mx-auto">
@@ -42,7 +81,7 @@ const Register = () => {
 
         <div className="divider mt-7">Or continue with</div>
 
-        <form className=" w-full sm:w-[80%]">
+        <form onSubmit={handleRegisterForm} className=" w-full sm:w-[80%]">
           <div>
             <label className="text-[#05264e]">
               Full Name
@@ -52,6 +91,7 @@ const Register = () => {
               type="text"
               className="input p-6 mt-1 w-full focus:outline-none focus:border-blue-600 text-lg"
               placeholder="Steven Job"
+              name="name"
               required
             />
           </div>
@@ -65,6 +105,7 @@ const Register = () => {
               type="email"
               className="input p-6 mt-1 w-full focus:outline-none focus:border-blue-600 text-lg"
               placeholder="stevenjob@gmail.com"
+              name="email"
               required
             />
           </div>
@@ -78,6 +119,7 @@ const Register = () => {
               type="text"
               className="input p-6 mt-1 w-full focus:outline-none focus:border-blue-600 text-lg"
               placeholder="stevenjob"
+              name="username"
               required
             />
           </div>
@@ -91,6 +133,7 @@ const Register = () => {
               type="password"
               className="input p-6 mt-1 w-full focus:outline-none focus:border-blue-600 text-lg"
               placeholder="******"
+              name="password"
               required
             />
           </div>
@@ -104,6 +147,7 @@ const Register = () => {
               type="password"
               className="input p-6 mt-1 w-full focus:outline-none focus:border-blue-600 text-lg"
               placeholder="******"
+              name="repassword"
               required
             />
           </div>
