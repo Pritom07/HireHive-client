@@ -7,6 +7,7 @@ import { useLottie } from "lottie-react";
 import { motion } from "motion/react";
 import useAuth from "../Context/useAuth";
 import { toast } from "react-toastify";
+import { useRef } from "react";
 
 const SignIn = () => {
   const options = {
@@ -18,6 +19,7 @@ const SignIn = () => {
   const { signInAccount, User } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const emailref = useRef();
 
   const handleSignInForm = (e) => {
     e.preventDefault();
@@ -40,8 +42,8 @@ const SignIn = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            if (data.modifiedCount > 0) {
-              toast.success("SignIn successfull");
+            if (data.modifiedCount === 1) {
+              toast.success("Welcome , Have a good day.");
             }
             {
               location?.state ? navigate(location?.state) : navigate("/");
@@ -86,6 +88,7 @@ const SignIn = () => {
               className="input p-6 mt-1 w-full focus:outline-none focus:border-blue-600 text-lg"
               placeholder="stevenjob@gmail.com"
               name="email"
+              ref={emailref}
               required
             />
           </div>

@@ -16,7 +16,7 @@ const Register = () => {
   };
 
   const { View } = useLottie(options);
-  const { createAccount, User } = useAuth();
+  const { createAccount, User, updateUserProfile } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -24,11 +24,13 @@ const Register = () => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const registerData = Object.fromEntries(formData.entries());
+    const name = registerData.name;
     const email = registerData.email;
     const Password = registerData.password;
     const Repassword = registerData.repassword;
     const isChecked = e.target.checkBox.checked;
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{6,}$/;
+    // eslint-disable-next-line no-unused-vars
     const { repassword, checkBox, ...remainingData } = registerData;
 
     if (!isChecked) {
@@ -55,6 +57,13 @@ const Register = () => {
         const CreationTime = user.metadata.creationTime;
         remainingData.lastSignInTime = LastSignInTime;
         remainingData.creationTime = CreationTime;
+        const userObj = { displayName: name };
+
+        updateUserProfile(userObj)
+          .then(() => {})
+          .catch((err) => {
+            toast.error(err.message);
+          });
 
         fetch("http://localhost:5000/users", {
           method: "POST",
@@ -66,7 +75,7 @@ const Register = () => {
           .then((res) => res.json())
           .then((data) => {
             if (data.insertedId) {
-              toast.success("successfully Registered");
+              toast.success(`Welcome, Have a Good Day.`);
             }
             {
               location?.state ? navigate(location?.state) : navigate("/");

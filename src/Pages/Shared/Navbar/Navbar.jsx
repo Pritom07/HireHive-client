@@ -5,10 +5,13 @@ import { BsFileEarmarkPost } from "react-icons/bs";
 import application from "../../../assets/application.png";
 import addjob from "../../../assets/addjob.png";
 import Logo from "../../../assets/Logo.png";
+import useAuth from "../../../Context/useAuth";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const { User, signOutUser } = useAuth();
 
   const handleRegister = () => {
     setIsMobileMenuOpen(false);
@@ -18,6 +21,17 @@ const Navbar = () => {
   const handleSignIn = () => {
     setIsMobileMenuOpen(false);
     navigate("/signin");
+  };
+
+  const handleSignOut = () => {
+    signOutUser()
+      .then(() => {
+        toast.success(`${User?.displayName}, You are Signout Now.`);
+        navigate("/");
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
   };
 
   const navlinks = (
@@ -69,18 +83,29 @@ const Navbar = () => {
       </div>
 
       <div className="hidden xl:flex items-center space-x-8 ml-4">
-        <button
-          onClick={handleRegister}
-          className="text-[#05264e] underline hover:text-blue-600 hover:-translate-y-1 duration-200 text-sm md:text-base cursor-pointer"
-        >
-          Register
-        </button>
-        <button
-          onClick={handleSignIn}
-          className="btn bg-blue-600 rounded-[5px] px-4 py-2 text-white hover:-translate-y-1 duration-200 hover:bg-[#05264e] text-sm md:text-base"
-        >
-          Sign In
-        </button>
+        {User ? (
+          <button
+            onClick={handleSignOut}
+            className="btn bg-blue-600 rounded-[5px] px-4 py-2 text-white hover:-translate-y-1 duration-200 hover:bg-[#05264e] text-sm md:text-base"
+          >
+            Sign Out
+          </button>
+        ) : (
+          <div className="flex gap-5">
+            <button
+              onClick={handleRegister}
+              className="text-[#05264e] underline hover:text-blue-600 hover:-translate-y-1 duration-200 text-sm md:text-base cursor-pointer"
+            >
+              Register
+            </button>
+            <button
+              onClick={handleSignIn}
+              className="btn bg-blue-600 rounded-[5px] px-4 py-2 text-white hover:-translate-y-1 duration-200 hover:bg-[#05264e] text-sm md:text-base"
+            >
+              Sign In
+            </button>
+          </div>
+        )}
       </div>
 
       {/* for small and medium devices */}
@@ -126,18 +151,29 @@ const Navbar = () => {
           <ul className="menu text-xl font-medium text-[#05264e] space-y-3">
             {navlinks}
           </ul>
-          <button
-            onClick={handleRegister}
-            className="text-[#05264e] w-40 text-center py-2 border border-[#05264e] rounded cursor-pointer"
-          >
-            Register
-          </button>
-          <button
-            onClick={handleSignIn}
-            className="btn bg-blue-600 w-40 rounded-[5px] py-2 text-white"
-          >
-            Sign In
-          </button>
+          {User ? (
+            <button
+              onClick={handleSignOut}
+              className="btn bg-blue-600 w-40 rounded-[5px] py-2 text-white"
+            >
+              Sign Out
+            </button>
+          ) : (
+            <div className="flex flex-col gap-4">
+              <button
+                onClick={handleRegister}
+                className="text-[#05264e] w-40 text-center py-2 border border-[#05264e] rounded cursor-pointer"
+              >
+                Register
+              </button>
+              <button
+                onClick={handleSignIn}
+                className="btn bg-blue-600 w-40 rounded-[5px] py-2 text-white"
+              >
+                Sign In
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
