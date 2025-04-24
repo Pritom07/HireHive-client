@@ -36,7 +36,6 @@ const SignIn = () => {
           creationTime,
           signedInMedium: "Google",
         };
-        console.log(user);
 
         fetch("http://localhost:5000/users", {
           method: "PUT",

@@ -8,7 +8,7 @@ import { useLottie } from "lottie-react";
 import { motion } from "motion/react";
 import useAuth from "../Context/useAuth";
 import { toast } from "react-toastify";
-import { GoogleAuthProvider } from "firebase/auth";
+import { GithubAuthProvider, GoogleAuthProvider } from "firebase/auth";
 
 const Register = () => {
   const options = {
@@ -17,10 +17,12 @@ const Register = () => {
   };
 
   const { View } = useLottie(options);
-  const { createAccount, updateUserProfile, googleLogin } = useAuth();
+  const { createAccount, updateUserProfile, googleLogin, githubLogin } =
+    useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const googleProvider = new GoogleAuthProvider();
+  const githubProvider = new GithubAuthProvider();
 
   const handleGoogleRegister = () => {
     googleLogin(googleProvider)
@@ -61,7 +63,53 @@ const Register = () => {
         }
       })
       .catch((err) => {
-        toast.error(`${err.message}`, {
+        toast.error(err.message, {
+          style: {
+            backgroundColor: "#E2E8F0",
+            color: "#05264e",
+          },
+        });
+      });
+  };
+
+  const handleGithubRegister = () => {
+    githubLogin(githubProvider)
+      .then((res) => {
+        const user = res.user;
+        const name = user.displayName;
+        const lastSignInTime = user.metadata.lastSignInTime;
+        const creationTime = user.metadata.creationTime;
+        const signedInuser = {
+          name,
+          lastSignInTime,
+          creationTime,
+          signedInMedium: "Github",
+        };
+
+        fetch("http://localhost:5000/users", {
+          method: "PUT",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(signedInuser),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.modifiedCount > 0 || data.upsertedCount > 0) {
+              toast.success(`Welcome ${name}, Have a Good Day`, {
+                style: {
+                  backgroundColor: "#E2E8F0",
+                  color: "#05264e",
+                },
+              });
+            }
+            {
+              location?.state ? navigate(location?.state) : navigate("/");
+            }
+          });
+      })
+      .catch((err) => {
+        toast.error(err.message, {
           style: {
             backgroundColor: "#E2E8F0",
             color: "#05264e",
@@ -165,7 +213,10 @@ const Register = () => {
           Sign Up with Google
         </button>
 
-        <button className="p-3 w-full sm:w-[80%] border-1 border-slate-200 rounded-[6px] mt-4 cursor-pointer hover:-translate-y-1 hover:text-blue-600 hover:shadow-sm duration-200 font-semibold text-nowrap flex justify-center items-center">
+        <button
+          onClick={handleGithubRegister}
+          className="p-3 w-full sm:w-[80%] border-1 border-slate-200 rounded-[6px] mt-4 cursor-pointer hover:-translate-y-1 hover:text-blue-600 hover:shadow-sm duration-200 font-semibold text-nowrap flex justify-center items-center"
+        >
           <FaGithub className="inline mr-2 text-2xl" />
           Sign Up with Github
         </button>

@@ -52,6 +52,10 @@ const Authprovider = ({ children }) => {
     return signInWithPopup(auth, googleProvider);
   };
 
+  const githubLogin = (githubProvider) => {
+    return signInWithPopup(auth, githubProvider);
+  };
+
   const userInfo = {
     User,
     loading,
@@ -60,6 +64,7 @@ const Authprovider = ({ children }) => {
     updateUserProfile,
     signOutUser,
     googleLogin,
+    githubLogin,
   };
   return (
     <ThemeContext.Provider value={userInfo}>{children}</ThemeContext.Provider>
