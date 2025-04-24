@@ -8,6 +8,7 @@ import { useLottie } from "lottie-react";
 import { motion } from "motion/react";
 import useAuth from "../Context/useAuth";
 import { toast } from "react-toastify";
+import { GoogleAuthProvider } from "firebase/auth";
 
 const Register = () => {
   const options = {
@@ -16,9 +17,58 @@ const Register = () => {
   };
 
   const { View } = useLottie(options);
-  const { createAccount, User, updateUserProfile } = useAuth();
+  const { createAccount, updateUserProfile, googleLogin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const googleProvider = new GoogleAuthProvider();
+
+  const handleGoogleRegister = () => {
+    googleLogin(googleProvider)
+      .then((res) => {
+        const user = res.user;
+        const name = user.displayName;
+        const email = user.email;
+        const lastSignInTime = user.metadata.lastSignInTime;
+        const creationTime = user.metadata.creationTime;
+        const signedInUser = {
+          name,
+          email,
+          lastSignInTime,
+          creationTime,
+          signedInMedium: "Google",
+        };
+
+        fetch("http://localhost:5000/users", {
+          method: "PUT",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(signedInUser),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.upsertedCount > 0 || data.modifiedCount > 0) {
+              toast.success(`Welcome ${name}, Have a Good Day`, {
+                style: {
+                  backgroundColor: "#E2E8F0",
+                  color: "#05264e",
+                },
+              });
+            }
+          });
+        {
+          location?.state ? navigate(location?.state) : navigate("/");
+        }
+      })
+      .catch((err) => {
+        toast.error(`${err.message}`, {
+          style: {
+            backgroundColor: "#E2E8F0",
+            color: "#05264e",
+          },
+        });
+      });
+  };
 
   const handleRegisterForm = (e) => {
     e.preventDefault();
@@ -75,7 +125,12 @@ const Register = () => {
           .then((res) => res.json())
           .then((data) => {
             if (data.insertedId) {
-              toast.success(`Welcome, Have a Good Day.`);
+              toast.success(`Welcome ${name}, Have a Good Day.`, {
+                style: {
+                  backgroundColor: "#E2E8F0",
+                  color: "#05264e",
+                },
+              });
             }
             {
               location?.state ? navigate(location?.state) : navigate("/");
@@ -102,7 +157,10 @@ const Register = () => {
           Start your Experience here
         </h1>
 
-        <button className="p-3 w-full sm:w-[80%] border-1 border-slate-200 rounded-[6px] mt-5 cursor-pointer hover:-translate-y-1 hover:text-blue-600 hover:shadow-sm duration-200 font-semibold text-nowrap flex justify-center items-center">
+        <button
+          onClick={handleGoogleRegister}
+          className="p-3 w-full sm:w-[80%] border-1 border-slate-200 rounded-[6px] mt-5 cursor-pointer hover:-translate-y-1 hover:text-blue-600 hover:shadow-sm duration-200 font-semibold text-nowrap flex justify-center items-center"
+        >
           <FcGoogle className="inline mr-2 text-2xl" />
           Sign Up with Google
         </button>

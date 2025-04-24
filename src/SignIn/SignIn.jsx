@@ -7,7 +7,7 @@ import { useLottie } from "lottie-react";
 import { motion } from "motion/react";
 import useAuth from "../Context/useAuth";
 import { toast } from "react-toastify";
-import { useRef } from "react";
+import { GoogleAuthProvider } from "firebase/auth";
 
 const SignIn = () => {
   const options = {
@@ -16,15 +16,65 @@ const SignIn = () => {
   };
 
   const { View } = useLottie(options);
-  const { signInAccount, User } = useAuth();
+  const { signInAccount, googleLogin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const emailref = useRef();
+  const googleProvider = new GoogleAuthProvider();
+
+  const handleGooglelogin = () => {
+    googleLogin(googleProvider)
+      .then((res) => {
+        const user = res.user;
+        const name = user.displayName;
+        const email = user.email;
+        const lastSignInTime = user.metadata.lastSignInTime;
+        const creationTime = user.metadata.creationTime;
+        const signedInUser = {
+          name,
+          email,
+          lastSignInTime,
+          creationTime,
+          signedInMedium: "Google",
+        };
+        console.log(user);
+
+        fetch("http://localhost:5000/users", {
+          method: "PUT",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(signedInUser),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.upsertedCount > 0 || data.modifiedCount > 0) {
+              toast.success(`Welcome ${name}, Have a Good Day`, {
+                style: {
+                  backgroundColor: "#E2E8F0",
+                  color: "#05264e",
+                },
+              });
+            }
+          });
+        {
+          location?.state ? navigate(location?.state) : navigate("/");
+        }
+      })
+      .catch((err) => {
+        toast.error(`${err.message}`, {
+          style: {
+            backgroundColor: "#E2E8F0",
+            color: "#05264e",
+          },
+        });
+      });
+  };
 
   const handleSignInForm = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const signinData = Object.fromEntries(formData.entries());
+    const name = signinData.name;
     const email = signinData.email;
     const password = signinData.password;
 
@@ -43,7 +93,12 @@ const SignIn = () => {
           .then((res) => res.json())
           .then((data) => {
             if (data.modifiedCount === 1) {
-              toast.success("Welcome , Have a good day.");
+              toast.success(`Welcome ${name}, Have a good day.`, {
+                style: {
+                  backgroundColor: "#E2E8F0",
+                  color: "#05264e",
+                },
+              });
             }
             {
               location?.state ? navigate(location?.state) : navigate("/");
@@ -70,7 +125,10 @@ const SignIn = () => {
           Member Login
         </h1>
 
-        <button className="p-3 w-full sm:w-[80%] border-1 border-slate-200 rounded-[6px] mt-5 cursor-pointer hover:-translate-y-1 hover:text-blue-600 hover:shadow-sm duration-200 font-semibold text-nowrap flex justify-center items-center">
+        <button
+          onClick={handleGooglelogin}
+          className="p-3 w-full sm:w-[80%] border-1 border-slate-200 rounded-[6px] mt-5 cursor-pointer hover:-translate-y-1 hover:text-blue-600 hover:shadow-sm duration-200 font-semibold text-nowrap flex justify-center items-center"
+        >
           <FcGoogle className="inline mr-2 text-2xl" />
           Sign In with Google
         </button>
@@ -78,6 +136,19 @@ const SignIn = () => {
         <div className="divider mt-7">Or continue with</div>
 
         <form onSubmit={handleSignInForm} className=" w-full sm:w-[80%]">
+          <div>
+            <label className="text-[#05264e]">
+              Full Name
+              <MdOutlineStarPurple500 className="inline text-[10px] relative bottom-1 ml-0.5" />
+            </label>
+            <input
+              type="text"
+              className="input p-6 mt-1 w-full focus:outline-none focus:border-blue-600 text-lg"
+              placeholder="Name you given when register.e.g- Steven Job"
+              name="name"
+              required
+            />
+          </div>
           <div className="mt-4">
             <label className="text-[#05264e]">
               Email
@@ -88,7 +159,6 @@ const SignIn = () => {
               className="input p-6 mt-1 w-full focus:outline-none focus:border-blue-600 text-lg"
               placeholder="stevenjob@gmail.com"
               name="email"
-              ref={emailref}
               required
             />
           </div>

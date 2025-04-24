@@ -18,7 +18,7 @@ const Topbanner = () => {
             animate={{ y: [0, 30, 0] }}
             transition={{ duration: 10, ease: easeInOut, repeat: Infinity }}
             src={bannerimg1}
-            className="max-w-full shadow-2xl w-[90%] md:w-[120%] mx-auto rounded-t-4xl rounded-r-4xl border-b-8 border-l-8 border-blue-600"
+            className="max-w-full shadow-2xl w-full  mx-auto rounded-t-4xl rounded-r-4xl border-b-8 border-l-8 border-blue-600"
             style={{ willChange: "transform" }}
           />
           <motion.img

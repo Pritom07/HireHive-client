@@ -26,7 +26,12 @@ const Navbar = () => {
   const handleSignOut = () => {
     signOutUser()
       .then(() => {
-        toast.success(`${User?.displayName}, You are Signout Now.`);
+        toast.success(`${User?.displayName}, You are Signout Now.`, {
+          style: {
+            backgroundColor: "#E2E8F0",
+            color: "#05264e",
+          },
+        });
         navigate("/");
       })
       .catch((err) => {
