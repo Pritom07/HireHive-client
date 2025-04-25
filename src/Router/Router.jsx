@@ -15,7 +15,11 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<App></App>}>
-        <Route index element={<Home></Home>}></Route>
+        <Route
+          index
+          loader={() => fetch("http://localhost:5000/jobs")}
+          element={<Home></Home>}
+        ></Route>
         <Route path="/application/me" element={<MyApplications />}></Route>
         <Route path="/add-job" element={<AddJob />}></Route>
         <Route path="/my-jobs" element={<MyPostedJobs />}></Route>
