@@ -1,11 +1,15 @@
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import { MdLocationPin } from "react-icons/md";
 import { VscDebugBreakpointLog } from "react-icons/vsc";
 import { TbPointFilled } from "react-icons/tb";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import useAuth from "../../../Context/useAuth";
+import Swal from "sweetalert2";
 
 const JobDetails = () => {
   const job = useLoaderData();
+  const { User } = useAuth();
+  const navigate = useNavigate();
 
   const {
     _id,
@@ -23,6 +27,34 @@ const JobDetails = () => {
     salaryRange,
     title,
   } = job;
+
+  const handleJobApply = (id) => {
+    const jobId = id;
+    const applicant_name = User?.displayName;
+    const applicant_email = User?.email;
+    const applicantInfo = { jobId, applicant_name, applicant_email };
+
+    fetch("http://localhost:5000/jobApplications", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(applicantInfo),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.insertedId) {
+          Swal.fire({
+            title: `You are successfully applied for the post "${title}" of "${company}"`,
+            icon: "success",
+            confirmButtonColor: "blue",
+            confirmButtonText: "Thanks for the Application",
+            draggable: true,
+          });
+        }
+        navigate("/application/me");
+      });
+  };
 
   return (
     <section className="px-3 min-h-screen mt-3 xl:mt-1">
@@ -133,7 +165,10 @@ const JobDetails = () => {
                 Go Back
               </button>
             </Link>
-            <button className="btn bg-blue-600 text-white hover:bg-[#05264e] w-full sm:w-auto">
+            <button
+              onClick={() => handleJobApply(_id)}
+              className="btn bg-blue-600 text-white hover:bg-[#05264e] w-full sm:w-auto"
+            >
               Apply Now
             </button>
           </div>
