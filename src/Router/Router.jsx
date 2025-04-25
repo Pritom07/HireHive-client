@@ -10,6 +10,7 @@ import AddJob from "../Pages/AddJob/addJob";
 import MyPostedJobs from "../Pages/MyPostedJobs/MyPostedJobs";
 import Register from "../Register/Register";
 import SignIn from "../SignIn/SignIn";
+import Alljobs from "../Pages/Home/Alljobs/Alljobs";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,6 +20,11 @@ const router = createBrowserRouter(
           index
           loader={() => fetch("http://localhost:5000/jobs")}
           element={<Home></Home>}
+        ></Route>
+        <Route
+          path="/all-jobs"
+          loader={() => fetch("http://localhost:5000/jobs")}
+          element={<Alljobs />}
         ></Route>
         <Route path="/application/me" element={<MyApplications />}></Route>
         <Route path="/add-job" element={<AddJob />}></Route>

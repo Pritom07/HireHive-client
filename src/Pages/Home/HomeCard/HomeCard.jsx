@@ -56,7 +56,12 @@ const HomeCard = ({ job }) => {
         <p className="text-slate-700 text-[17px] font-medium">{description}</p>
         <div className="-ml-2 text-slate-500">
           {requirements.map((requirement, idx) => (
-            <button key={idx} className="p-3 bg-slate-200 m-2 rounded-[5px]">
+            <button
+              key={idx}
+              className={`p-3 bg-slate-200 m-2 rounded-[5px] ${
+                highlight && "border-2 border-blue-600"
+              }`}
+            >
               {requirement}
             </button>
           ))}
