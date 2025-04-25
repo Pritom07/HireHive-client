@@ -2,9 +2,11 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { IoLocationSharp } from "react-icons/io5";
 import { PiShoppingBagOpenBold } from "react-icons/pi";
+import { useNavigate } from "react-router-dom";
 
 const HomeCard = ({ job }) => {
   const [highlight, setHighlet] = useState(false);
+  const navigate = useNavigate();
 
   const {
     _id,
@@ -19,7 +21,7 @@ const HomeCard = ({ job }) => {
   } = job;
 
   const ViewJobDetails = (id) => {
-    console.log(id);
+    navigate(`/jobDetails/${id}`);
   };
 
   return (
