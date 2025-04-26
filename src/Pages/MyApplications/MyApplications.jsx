@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import useAuth from "../../Context/useAuth";
+import Swal from "sweetalert2";
 
 const MyApplications = () => {
   const [myApplies, setMyApplies] = useState([]);
+  console.log(myApplies);
   const { User } = useAuth();
 
   useEffect(() => {
@@ -10,6 +12,36 @@ const MyApplications = () => {
       .then((res) => res.json())
       .then((data) => setMyApplies(data));
   }, [User?.email]);
+
+  const handleRemoveApply = (id, company) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "red",
+      cancelButtonColor: "blue",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:5000/jobApplications/${id}`, {
+          method: "DELETE",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.deletedCount > 0) {
+              Swal.fire({
+                title: "Deleted!",
+                text: `Your application in '${company}' is deleted`,
+                icon: "success",
+              });
+            }
+            const remaining = myApplies.filter((myApply) => myApply._id !== id);
+            setMyApplies(remaining);
+          });
+      }
+    });
+  };
 
   return (
     <div className="max-w-7xl mx-auto font-inter min-h-screen">
@@ -51,7 +83,12 @@ const MyApplications = () => {
                   {myApply?.applicant_email}
                 </td>
                 <th>
-                  <button className="btn bg-red-500 text-white hover:bg-red-600 text-nowrap">
+                  <button
+                    onClick={() =>
+                      handleRemoveApply(myApply?._id, myApply?.company)
+                    }
+                    className="btn bg-red-500 text-white hover:bg-red-600 text-nowrap"
+                  >
                     Remove Apply
                   </button>
                 </th>
