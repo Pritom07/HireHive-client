@@ -1,3 +1,5 @@
+import Swal from "sweetalert2";
+
 const AddJob = () => {
   const handleAddJob = (e) => {
     e.preventDefault();
@@ -8,6 +10,27 @@ const AddJob = () => {
       initialEntries.responsibilities.split(",");
     const { min, max, currency, ...formEntriesData } = initialEntries;
     formEntriesData.salaryRange = { min, max, currency };
+
+    fetch("http://localhost:5000/jobs", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(formEntriesData),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.insertedId) {
+          Swal.fire({
+            title: `Job Post "${formEntriesData.title}" is added successfully!`,
+            icon: "success",
+            confirmButtonColor: "blue",
+            confirmButtonText: "Thanks For Posting",
+            draggable: true,
+          });
+        }
+        e.target.reset();
+      });
   };
 
   return (
