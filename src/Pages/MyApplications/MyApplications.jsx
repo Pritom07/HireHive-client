@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import useAuth from "../../Context/useAuth";
+import { MdDelete } from "react-icons/md";
 import Swal from "sweetalert2";
 
 const MyApplications = () => {
   const [myApplies, setMyApplies] = useState([]);
-  console.log(myApplies);
   const { User } = useAuth();
+  console.log(myApplies);
 
   useEffect(() => {
     fetch(`http://localhost:5000/jobApplications?email=${User?.email}`)
@@ -89,6 +90,7 @@ const MyApplications = () => {
                     }
                     className="btn bg-red-500 text-white hover:bg-red-600 text-nowrap"
                   >
+                    <MdDelete className="inline text-white text-xl" />
                     Remove Apply
                   </button>
                 </th>

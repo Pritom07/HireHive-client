@@ -12,6 +12,7 @@ import Register from "../Register/Register";
 import SignIn from "../SignIn/SignIn";
 import Alljobs from "../Pages/Home/Alljobs/Alljobs";
 import JobDetails from "../Pages/Home/JobDetails/JobDetails";
+import ViewApplicants from "../Pages/MyPostedJobs/ViewApplicants/ViewApplicants";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -37,6 +38,13 @@ const router = createBrowserRouter(
         <Route path="/application/me" element={<MyApplications />}></Route>
         <Route path="/add-job" element={<AddJob />}></Route>
         <Route path="/my-jobs" element={<MyPostedJobs />}></Route>
+        <Route
+          path="/my-jobs/applicants/:jobID"
+          loader={({ params }) =>
+            fetch(`http://localhost:5000/jobApplications/${params.jobID}`)
+          }
+          element={<ViewApplicants />}
+        ></Route>
         <Route path="/register" element={<Register />}></Route>
         <Route path="/signin" element={<SignIn />}></Route>
       </Route>

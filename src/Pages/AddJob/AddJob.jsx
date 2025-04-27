@@ -22,7 +22,7 @@ const AddJob = () => {
       .then((data) => {
         if (data.insertedId) {
           Swal.fire({
-            title: `Job Post "${formEntriesData.title}" is added successfully!`,
+            title: `Job Post "${formEntriesData.title}" is posted successfully!`,
             icon: "success",
             confirmButtonColor: "blue",
             confirmButtonText: "Thanks For Posting",
@@ -132,6 +132,7 @@ const AddJob = () => {
                 <option>Data Science</option>
                 <option>Development</option>
                 <option>Design</option>
+                <option>Networking</option>
               </select>
             </div>
           </div>
@@ -230,8 +231,8 @@ const AddJob = () => {
               <input
                 type="email"
                 className="input w-[100%] focus:outline-none focus:border-[#05264e]"
-                name="HR_Email"
-                placeholder="hr_email"
+                name="hr_email"
+                placeholder="Use that Email that you used for Login or Register"
                 required
               />
             </div>
