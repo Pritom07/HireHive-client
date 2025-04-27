@@ -13,6 +13,7 @@ import SignIn from "../SignIn/SignIn";
 import Alljobs from "../Pages/Home/Alljobs/Alljobs";
 import JobDetails from "../Pages/Home/JobDetails/JobDetails";
 import ViewApplicants from "../Pages/MyPostedJobs/ViewApplicants/ViewApplicants";
+import JobApply from "../Pages/Home/JobApply/JobApply";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -35,6 +36,7 @@ const router = createBrowserRouter(
           }
           element={<JobDetails />}
         ></Route>
+        <Route path="/jobDetails/apply/:jobID" element={<JobApply />}></Route>
         <Route path="/application/me" element={<MyApplications />}></Route>
         <Route path="/add-job" element={<AddJob />}></Route>
         <Route path="/my-jobs" element={<MyPostedJobs />}></Route>

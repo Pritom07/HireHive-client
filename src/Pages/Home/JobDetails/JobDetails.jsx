@@ -4,6 +4,7 @@ import { VscDebugBreakpointLog } from "react-icons/vsc";
 import { TbPointFilled } from "react-icons/tb";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import useAuth from "../../../Context/useAuth";
+import { FaArrowRightLong } from "react-icons/fa6";
 import Swal from "sweetalert2";
 
 const JobDetails = () => {
@@ -28,32 +29,36 @@ const JobDetails = () => {
     title,
   } = job;
 
-  const handleJobApply = (id) => {
-    const jobId = id;
-    const applicant_name = User?.displayName;
-    const applicant_email = User?.email;
-    const applicantInfo = { jobId, applicant_name, applicant_email };
+  // const handleJobApply = (id) => {
+  //   const jobId = id;
+  //   const applicant_name = User?.displayName;
+  //   const applicant_email = User?.email;
+  //   const applicantInfo = { jobId, applicant_name, applicant_email };
 
-    fetch("http://localhost:5000/jobApplications", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(applicantInfo),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.insertedId) {
-          Swal.fire({
-            title: `You are successfully applied for the post "${title}" of "${company}"`,
-            icon: "success",
-            confirmButtonColor: "blue",
-            confirmButtonText: "Thanks for the Application",
-            draggable: true,
-          });
-        }
-        navigate("/application/me");
-      });
+  //   fetch("http://localhost:5000/jobApplications", {
+  //     method: "POST",
+  //     headers: {
+  //       "content-type": "application/json",
+  //     },
+  //     body: JSON.stringify(applicantInfo),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       if (data.insertedId) {
+  //         Swal.fire({
+  //           title: `You are successfully applied for the post "${title}" of "${company}"`,
+  //           icon: "success",
+  //           confirmButtonColor: "blue",
+  //           confirmButtonText: "Thanks for the Application",
+  //           draggable: true,
+  //         });
+  //       }
+  //       navigate("/application/me");
+  //     });
+  // };
+
+  const handleJobApply = (jobID) => {
+    navigate(`/jobDetails/apply/${jobID}`);
   };
 
   return (
@@ -169,7 +174,7 @@ const JobDetails = () => {
               onClick={() => handleJobApply(_id)}
               className="btn bg-blue-600 text-white hover:bg-[#05264e] w-full sm:w-auto"
             >
-              Apply Now
+              Apply <FaArrowRightLong className="inline" />
             </button>
           </div>
         </div>
