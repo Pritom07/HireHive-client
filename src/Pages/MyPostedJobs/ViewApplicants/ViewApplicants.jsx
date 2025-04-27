@@ -4,21 +4,17 @@ import Swal from "sweetalert2";
 const ViewApplicants = () => {
   const totApplicants = useLoaderData();
 
-  const handleStatus = (e, jobID, email) => {
+  const handleStatus = (e, id) => {
     const status = e.target.value;
-    localStorage.setItem(`status-${jobID}-${email}`, status);
     const applicantStatus = { status };
 
-    fetch(
-      `http://localhost:5000/jobApplications?jobID=${jobID}&email=${email}`,
-      {
-        method: "PUT",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(applicantStatus),
-      }
-    )
+    fetch(`http://localhost:5000/jobApplications/${id}`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(applicantStatus),
+    })
       .then((res) => res.json())
       .then((data) => {
         if (data.upsertedCount > 0 || data.modifiedCount > 0) {
@@ -62,23 +58,13 @@ const ViewApplicants = () => {
                 </td>
                 <td>
                   <select
-                    onChange={(e) =>
-                      handleStatus(
-                        e,
-                        applicant?.jobId,
-                        applicant?.applicant_email
-                      )
-                    }
-                    defaultValue={
-                      localStorage.getItem(
-                        `status-${applicant?.jobId}-${applicant?.applicant_email}`
-                      ) || "Select Status"
-                    }
+                    onChange={(e) => handleStatus(e, applicant._id)}
+                    defaultValue={applicant.status || "Select Status"}
                     className="select focus:outline-none focus:border-[#05264e]"
                   >
                     <option disabled={true}>Select Status</option>
-                    <option>Selected for Viva</option>
-                    <option>Reviewing CV</option>
+                    <option>Hired</option>
+                    <option>Selected for VIVA</option>
                     <option>Pending</option>
                     <option>Rejected</option>
                   </select>

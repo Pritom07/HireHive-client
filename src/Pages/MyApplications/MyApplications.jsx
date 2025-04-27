@@ -6,7 +6,6 @@ import Swal from "sweetalert2";
 const MyApplications = () => {
   const [myApplies, setMyApplies] = useState([]);
   const { User } = useAuth();
-  console.log(myApplies);
 
   useEffect(() => {
     fetch(`http://localhost:5000/jobApplications?email=${User?.email}`)
@@ -56,6 +55,7 @@ const MyApplications = () => {
               <th>Company</th>
               <th>Applicant_Name</th>
               <th>Applicant_Email</th>
+              <th>Status</th>
               <th></th>
             </tr>
           </thead>
@@ -83,7 +83,8 @@ const MyApplications = () => {
                 <td className="text-[#05264e] font-semibold">
                   {myApply?.applicant_email}
                 </td>
-                <th>
+                <td>{myApply?.status} || Status_Not_Set_Yet</td>
+                <td>
                   <button
                     onClick={() =>
                       handleRemoveApply(myApply?._id, myApply?.company)
@@ -93,7 +94,7 @@ const MyApplications = () => {
                     <MdDelete className="inline text-white text-xl" />
                     Remove Apply
                   </button>
-                </th>
+                </td>
               </tr>
             ))}
           </tbody>
