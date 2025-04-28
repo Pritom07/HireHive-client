@@ -1,14 +1,37 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "../../../Context/useAuth";
+import Swal from "sweetalert2";
 
 const JobApply = () => {
   const { User } = useAuth();
   const { jobID } = useParams();
+  const navigate = useNavigate();
 
   const handleApply = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const applicantInfo = Object.fromEntries(formData.entries());
+
+    fetch("http://localhost:5000/jobApplications", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(applicantInfo),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.insertedId) {
+          Swal.fire({
+            title: `You are successfully applied for the JobID : "${jobID}"`,
+            icon: "success",
+            confirmButtonColor: "blue",
+            confirmButtonText: "Thanks for the Application",
+            draggable: true,
+          });
+        }
+        navigate("/application/me");
+      });
   };
 
   return (
@@ -27,7 +50,7 @@ const JobApply = () => {
             type="text"
             defaultValue={jobID}
             className="input w-full"
-            name="jobID"
+            name="jobId"
             required
           />
         </div>
@@ -39,7 +62,7 @@ const JobApply = () => {
             defaultValue={User?.displayName}
             className="input w-full"
             placeholder="Use the Similar Name that you used for LogIn"
-            name="name"
+            name="applicant_name"
             required
           />
         </div>
@@ -51,7 +74,7 @@ const JobApply = () => {
             defaultValue={User?.email}
             className="input w-full"
             placeholder="Use the Similar Email that you used for LogIn"
-            name="email"
+            name="applicant_email"
             required
           />
         </div>

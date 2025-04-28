@@ -14,6 +14,7 @@ import Alljobs from "../Pages/Home/Alljobs/Alljobs";
 import JobDetails from "../Pages/Home/JobDetails/JobDetails";
 import ViewApplicants from "../Pages/MyPostedJobs/ViewApplicants/ViewApplicants";
 import JobApply from "../Pages/Home/JobApply/JobApply";
+import PrivateRoute from "../PrivateRoute/PrivateRoute";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,12 +35,44 @@ const router = createBrowserRouter(
           loader={({ params }) =>
             fetch(`http://localhost:5000/jobs/${params.id}`)
           }
-          element={<JobDetails />}
+          element={
+            <PrivateRoute>
+              <JobDetails />
+            </PrivateRoute>
+          }
         ></Route>
-        <Route path="/jobDetails/apply/:jobID" element={<JobApply />}></Route>
-        <Route path="/application/me" element={<MyApplications />}></Route>
-        <Route path="/add-job" element={<AddJob />}></Route>
-        <Route path="/my-jobs" element={<MyPostedJobs />}></Route>
+        <Route
+          path="/jobDetails/apply/:jobID"
+          element={
+            <PrivateRoute>
+              <JobApply />
+            </PrivateRoute>
+          }
+        ></Route>
+        <Route
+          path="/application/me"
+          element={
+            <PrivateRoute>
+              <MyApplications />
+            </PrivateRoute>
+          }
+        ></Route>
+        <Route
+          path="/add-job"
+          element={
+            <PrivateRoute>
+              <AddJob />
+            </PrivateRoute>
+          }
+        ></Route>
+        <Route
+          path="/my-jobs"
+          element={
+            <PrivateRoute>
+              <MyPostedJobs />
+            </PrivateRoute>
+          }
+        ></Route>
         <Route
           path="/my-jobs/applicants/:jobID"
           loader={({ params }) =>

@@ -83,7 +83,9 @@ const MyApplications = () => {
                 <td className="text-[#05264e] font-semibold">
                   {myApply?.applicant_email}
                 </td>
-                <td>{myApply?.status} || Status_Not_Set_Yet</td>
+                <td>
+                  {myApply?.status ? myApply?.status : "Status_Not_Set_Yet"}
+                </td>
                 <td>
                   <button
                     onClick={() =>

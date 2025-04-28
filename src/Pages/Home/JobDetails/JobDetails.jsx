@@ -3,13 +3,10 @@ import { MdLocationPin } from "react-icons/md";
 import { VscDebugBreakpointLog } from "react-icons/vsc";
 import { TbPointFilled } from "react-icons/tb";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import useAuth from "../../../Context/useAuth";
 import { FaArrowRightLong } from "react-icons/fa6";
-import Swal from "sweetalert2";
 
 const JobDetails = () => {
   const job = useLoaderData();
-  const { User } = useAuth();
   const navigate = useNavigate();
 
   const {
@@ -28,34 +25,6 @@ const JobDetails = () => {
     salaryRange,
     title,
   } = job;
-
-  // const handleJobApply = (id) => {
-  //   const jobId = id;
-  //   const applicant_name = User?.displayName;
-  //   const applicant_email = User?.email;
-  //   const applicantInfo = { jobId, applicant_name, applicant_email };
-
-  //   fetch("http://localhost:5000/jobApplications", {
-  //     method: "POST",
-  //     headers: {
-  //       "content-type": "application/json",
-  //     },
-  //     body: JSON.stringify(applicantInfo),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       if (data.insertedId) {
-  //         Swal.fire({
-  //           title: `You are successfully applied for the post "${title}" of "${company}"`,
-  //           icon: "success",
-  //           confirmButtonColor: "blue",
-  //           confirmButtonText: "Thanks for the Application",
-  //           draggable: true,
-  //         });
-  //       }
-  //       navigate("/application/me");
-  //     });
-  // };
 
   const handleJobApply = (jobID) => {
     navigate(`/jobDetails/apply/${jobID}`);
