@@ -15,6 +15,7 @@ import JobDetails from "../Pages/Home/JobDetails/JobDetails";
 import ViewApplicants from "../Pages/MyPostedJobs/ViewApplicants/ViewApplicants";
 import JobApply from "../Pages/Home/JobApply/JobApply";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
+import ErrorRoute from "../ErrorRoute/ErrorRoute";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -83,6 +84,7 @@ const router = createBrowserRouter(
         <Route path="/register" element={<Register />}></Route>
         <Route path="/signin" element={<SignIn />}></Route>
       </Route>
+      ,<Route path="*" element={<ErrorRoute />}></Route>
     </>
   )
 );
