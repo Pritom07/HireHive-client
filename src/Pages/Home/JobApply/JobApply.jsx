@@ -35,13 +35,13 @@ const JobApply = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto min-h-screen font-inter">
+    <div className="max-w-7xl mx-auto min-h-screen font-inter px-2.5">
       <h1 className="text-center text-2xl md:text-3xl font-merriweather font-semibold mt-1.5">
         Apply Your Dream Job Here
       </h1>
       <form
         onSubmit={handleApply}
-        className="bg-slate-50 px-6 py-8 rounded-[5px] border border-blue-600 w-[100%] max-w-xl mx-auto mt-4"
+        className="bg-slate-50 px-6 py-8 rounded-[5px] border border-blue-600 w-[100%] max-w-xl mx-auto mt-5"
       >
         <div className="w-full">
           <label className="label">Job ID :</label>
