@@ -37,7 +37,7 @@ const SignIn = () => {
           signedInMedium: "Google",
         };
 
-        fetch("http://localhost:5000/users", {
+        fetch("https://hirehive-server.vercel.app/users", {
           method: "PUT",
           headers: {
             "content-type": "application/json",
@@ -82,7 +82,7 @@ const SignIn = () => {
         const user = res.user;
         signinData.lastSignInTime = user.metadata.lastSignInTime;
 
-        fetch("http://localhost:5000/users", {
+        fetch("https://hirehive-server.vercel.app/users", {
           method: "PATCH",
           headers: {
             "content-type": "application/json",

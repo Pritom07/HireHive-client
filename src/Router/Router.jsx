@@ -23,18 +23,18 @@ const router = createBrowserRouter(
       <Route path="/" element={<App></App>}>
         <Route
           index
-          loader={() => fetch("http://localhost:5000/jobs")}
+          loader={() => fetch("https://hirehive-server.vercel.app/jobs")}
           element={<Home></Home>}
         ></Route>
         <Route
           path="/all-jobs"
-          loader={() => fetch("http://localhost:5000/jobs")}
+          loader={() => fetch("https://hirehive-server.vercel.app/jobs")}
           element={<Alljobs />}
         ></Route>
         <Route
           path="/jobDetails/:id"
           loader={({ params }) =>
-            fetch(`http://localhost:5000/jobs/${params.id}`)
+            fetch(`https://hirehive-server.vercel.app/jobs/${params.id}`)
           }
           element={
             <PrivateRoute>
@@ -77,7 +77,9 @@ const router = createBrowserRouter(
         <Route
           path="/my-jobs/applicants/:jobID"
           loader={({ params }) =>
-            fetch(`http://localhost:5000/jobApplications/${params.jobID}`)
+            fetch(
+              `https://hirehive-server.vercel.app/jobApplications/${params.jobID}`
+            )
           }
           element={<ViewApplicants />}
         ></Route>

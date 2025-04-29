@@ -12,7 +12,7 @@ const JobApply = () => {
     const formData = new FormData(e.target);
     const applicantInfo = Object.fromEntries(formData.entries());
 
-    fetch("http://localhost:5000/jobApplications", {
+    fetch("https://hirehive-server.vercel.app/jobApplications", {
       method: "POST",
       headers: {
         "content-type": "application/json",

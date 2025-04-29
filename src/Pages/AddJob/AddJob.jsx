@@ -11,7 +11,7 @@ const AddJob = () => {
     const { min, max, currency, ...formEntriesData } = initialEntries;
     formEntriesData.salaryRange = { min, max, currency };
 
-    fetch("http://localhost:5000/jobs", {
+    fetch("https://hirehive-server.vercel.app/jobs", {
       method: "POST",
       headers: {
         "content-type": "application/json",

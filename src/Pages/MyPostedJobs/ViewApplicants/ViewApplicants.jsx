@@ -8,7 +8,7 @@ const ViewApplicants = () => {
     const status = e.target.value;
     const applicantStatus = { status };
 
-    fetch(`http://localhost:5000/jobApplications/${id}`, {
+    fetch(`https://hirehive-server.vercel.app/jobApplications/${id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",

@@ -8,7 +8,9 @@ const MyApplications = () => {
   const { User } = useAuth();
 
   useEffect(() => {
-    fetch(`http://localhost:5000/jobApplications?email=${User?.email}`)
+    fetch(
+      `https://hirehive-server.vercel.app/jobApplications?email=${User?.email}`
+    )
       .then((res) => res.json())
       .then((data) => setMyApplies(data));
   }, [User?.email]);
@@ -24,7 +26,7 @@ const MyApplications = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:5000/jobApplications/${id}`, {
+        fetch(`https://hirehive-server.vercel.app/jobApplications/${id}`, {
           method: "DELETE",
         })
           .then((res) => res.json())

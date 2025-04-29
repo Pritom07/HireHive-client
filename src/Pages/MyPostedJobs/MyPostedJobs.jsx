@@ -9,7 +9,7 @@ const MyPostedJobs = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`http://localhost:5000/jobs?email=${User?.email}`)
+    fetch(`https://hirehive-server.vercel.app/jobs?email=${User?.email}`)
       .then((res) => res.json())
       .then((data) => setMyPosts(data));
   }, [User?.email]);

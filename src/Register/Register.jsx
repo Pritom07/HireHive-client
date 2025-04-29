@@ -40,7 +40,7 @@ const Register = () => {
           signedInMedium: "Google",
         };
 
-        fetch("http://localhost:5000/users", {
+        fetch("https://hirehive-server.vercel.app/users", {
           method: "PUT",
           headers: {
             "content-type": "application/json",
@@ -86,7 +86,7 @@ const Register = () => {
           signedInMedium: "Github",
         };
 
-        fetch("http://localhost:5000/users", {
+        fetch("https://hirehive-server.vercel.app/users", {
           method: "PUT",
           headers: {
             "content-type": "application/json",
@@ -163,7 +163,7 @@ const Register = () => {
             toast.error(err.message);
           });
 
-        fetch("http://localhost:5000/users", {
+        fetch("https://hirehive-server.vercel.app/users", {
           method: "POST",
           headers: {
             "content-type": "application/json",
